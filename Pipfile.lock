@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "4b01a07beda83da82bb489ff8e75850332e1beb9094e8a0aa2c7bdabd31ef7a5"
+            "sha256": "be353c83d8483c5ae8329215f92b1867c5ae5b7d9844e6a0acf9d9701c18ca14"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -90,19 +90,19 @@
         },
         "opencv-python": {
             "hashes": [
-                "sha256:08d5d91d967b58d6db86073b2ad3eaef88ca4ebdfd45c9059bf59f5ded0c7ad2",
-                "sha256:198a75138241810206a17c829dbcc40a7cb1841cda538ca86cbbfc6c7d95f898",
-                "sha256:4b4b1a34c79bf8d3738e3cfe9a9e67b51a79663f6b692cbdad8c31f570da4157",
-                "sha256:66aac3e5b5faa48d4025816592f3af19e4bfc2c68dec067bae2dbb4ca10aa9e2",
-                "sha256:6bbc32f59e1b1a7db7b39c81f63d00625f041d333037fd8702f6da52cc39108b",
-                "sha256:c8de2dec111122a02e8beb28e16c31904992dfd6186560b142a92c71403c1039",
-                "sha256:e2b4272e736836f66c2d176e43ab8101f3a00d45654916399f52e150c58981ac",
-                "sha256:f8b6d0a212253dd26ad338c812f1f23ca118fdf05a9c8c6b9444f161aa8c5881",
-                "sha256:f90ba04b8f73bc5c3814037699739f0156f597338a98f05956c684e7c3ca10d2"
+                "sha256:04456937c8f12ca64ff94df8bfd813ca98f5c9767da792948969a759c716ebe2",
+                "sha256:3198fcbcb8f98fd68063bf2c75d129b0f50d46e555a4e47578a6eb086eb38e1f",
+                "sha256:4ae0b5a2acbcfb9813035f1644cfba751edd02797fac994e32180813eeef8420",
+                "sha256:549c2401f8654708c702bdf0e26d45816b9c411369a0efa41907ec2b4ec0e707",
+                "sha256:6a49842cc0ba9f43e35a289e61c0e15a1f8be8df60145ee5c7d42593b0d4f4b8",
+                "sha256:726a2b40c1120a0bbd0116394c6a5b2aa0a4dfa4e609a81ee10d12c6a34cd372",
+                "sha256:ace53616cdffc9643e17e075397b493e607c427d388c7508798ef7ad2ed577cc",
+                "sha256:add600736d0d65a39e797a9ceeb494f3cdc5736d4bd96b4f89d65a8c92451528",
+                "sha256:afadc76a38a07713a4c2b4702da917cf0ed489be57e2a40a34e670189731de7d"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.6'",
-            "version": "==5.0.0.93"
+            "version": "==4.14.0.94"
         }
     },
     "develop": {}
