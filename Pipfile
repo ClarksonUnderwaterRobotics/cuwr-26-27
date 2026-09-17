@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 opencv-python = "<=5.0.0"
+ultralytics = "26"
 
 [dev-packages]
 
