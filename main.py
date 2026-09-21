@@ -18,8 +18,14 @@ yolo = YOLO("yolov8s.pt")
 # this may need to be ran as root. It may be SE linux or some odd quirck of the Red Hat world for me but who knows.
 # This is lagging on my end I do not think my loopback was made for this sort of work, and my IGPU sucks at video encoding. 
 # also my I have a 12th gen 
-video_path = "udp://127.0.0.1:1234"
-videoCap = cv2.VideoCapture(video_path)
+
+dev_cam = False
+try:
+    video_path = "/dev/null" # todo add top side IP
+    videoCap = cv2.VideoCapture(video_path)
+except:
+    video_path = "udp://127.0.0.1:1234"
+    videoCap = cv2.VideoCapture(video_path)
 
 frame_count = 0
 
@@ -31,9 +37,16 @@ def getColours(cls_num):
 while True:
     
     ret, frame = videoCap.read()
-    print(ret)
-    if not ret:
+    
+    if not ret and not dev_cam :
+        video_path = "udp://127.0.0.1:1234"
+        videoCap = cv2.VideoCapture(video_path)
+        dev_cam = True
+        continue
+    elif not ret and dev_cam:
+        print("/dev/video0 and ROV cam not found; exiting; perhaps run ffmpeg as root.")
         break
+        
     results = yolo.track(frame, stream=True) 
     for result in results:
         class_names = result.names
