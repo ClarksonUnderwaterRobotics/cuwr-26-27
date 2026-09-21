@@ -20,11 +20,12 @@ frame_count = 0
 def getColours(cls_num):
     """Generate unique colors for each class ID"""
     random.seed(cls_num)
-    return tuple(random.randint(0, 255) for _ in range(3))
+    return (255, 0, 0)
 
 while True:
     
     ret, frame = videoCap.read()
+    print(ret)
     if not ret:
         break
     results = yolo.track(frame, stream=True) 
@@ -49,14 +50,15 @@ while True:
                   
     cv2.imshow("test",frame)
     #no idea what this dose
-    key = cv2.waitKey(1)
-    if(key < -1):
-          cv2.destroyAllWindows()
+    key = cv2.waitKey(10)
+
+    if key ==27 or cv2.getWindowProperty('test', cv2.WND_PROP_VISIBLE) < 1:
           break
     
     #todo add exit
     frame_count += 1
-   
+
+cv2.destroyAllWindows()
 videoCap.release()
 
 
