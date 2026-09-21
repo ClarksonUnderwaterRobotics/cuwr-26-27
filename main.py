@@ -38,6 +38,7 @@ while True:
     
     ret, frame = videoCap.read()
     
+    # TODO move to an init funciton for a slight speed up
     if not ret and not dev_cam :
         video_path = "udp://127.0.0.1:1234"
         videoCap = cv2.VideoCapture(video_path)
