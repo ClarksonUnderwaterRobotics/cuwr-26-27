@@ -1,0 +1,32 @@
+{
+  "name": "ROV Topside Ubuntu 24.04",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "rov-topside",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools",
+        "ms-python.python",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  },
+  "remoteUser": "rov",
+  "updateRemoteUserUID": true,
+  "runArgs": [
+    "--privileged"
+  ],
+  "containerEnv": {
+    "DISPLAY": ":0",
+    "WAYLAND_DISPLAY": "wayland-0",
+    "XDG_RUNTIME_DIR": "/tmp/runtime-root",
+    "PULSE_SERVER": "unix:/tmp/runtime-root/pulse/native"
+  },
+  "mounts": [
+    "source=/mnt/wslg,target=/tmp/wslg,type=bind,consistency=cached",
+    "source=/mnt/wslg/runtime-dir/wayland-0,target=/tmp/runtime-root/wayland-0,type=bind,consistency=cached",
+    "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached"
+  ],
+  "postCreateCommand": "mkdir -p /tmp/runtime-root && chmod 700 /tmp/runtime-root"
+}
