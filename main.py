@@ -19,13 +19,10 @@ yolo = YOLO("yolov8s.pt")
 # This is lagging on my end I do not think my loopback was made for this sort of work, and my IGPU sucks at video encoding. 
 # also my I have a 12th gen 
 
-dev_cam = False
-try:
-    video_path = "/dev/null" # todo add top side IP
-    videoCap = cv2.VideoCapture(video_path)
-except:
-    video_path = "udp://127.0.0.1:1234"
-    videoCap = cv2.VideoCapture(video_path)
+
+
+video_path = "rtsp://192.168.2.2:8554/video_stream__dev_video0"
+videoCap = cv2.VideoCapture(video_path)
 
 frame_count = 0
 
