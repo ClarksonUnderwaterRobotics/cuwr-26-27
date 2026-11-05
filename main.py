@@ -32,48 +32,49 @@ def getColours(cls_num):
     return (255, 0, 0)
 
 while True:
-    
-    ret, frame = videoCap.read()
-    
-    # TODO move to an init funciton for a slight speed up
-    if not ret and not dev_cam :
-        video_path = "udp://127.0.0.1:1234"
-        videoCap = cv2.VideoCapture(video_path)
-        dev_cam = True
-        continue
-    elif not ret and dev_cam:
-        print("/dev/video0 and ROV cam not found; exiting; perhaps run ffmpeg as root.")
-        break
-        
-    results = yolo.track(frame, stream=True) 
-    for result in results:
-        class_names = result.names
-        for box in result.boxes:
-            if box.conf[0] > 0.4:
-                x1, y1, x2, y2 = map(int, box.xyxy[0])
+    key = cv2.waitKey(1)
+    if key == 68: # "D" for dectect
 
-                cls = int(box.cls[0])
-                class_name = class_names[cls]
+        ret, frame = videoCap.read()
 
-                conf = float(box.conf[0])
+        # TODO move to an init funciton for a slight speed up
+        if not ret :
+            video_path = "/dev/video0"
+            videoCap = cv2.VideoCapture(video_path)
+            dev_cam = True
+            continue
 
-                colour = getColours(cls)
+        results = yolo.track(frame, stream=True)
+        for result in results:
+            class_names = result.names
+            for box in result.boxes:
+                if box.conf[0] > 0.4:
+                    x1, y1, x2, y2 = map(int, box.xyxy[0])
 
-                cv2.rectangle(frame, (x1, y1), (x2, y2), colour, 2)
+                    cls = int(box.cls[0])
+                    class_name = class_names[cls]
 
-                cv2.putText(frame, f"{class_name} {conf:.2f}",
-                            (x1, max(y1 - 10, 20)), cv2.FONT_HERSHEY_SIMPLEX,
-                            0.6, colour, 2)
-                  
-    cv2.imshow("test",frame)
-    #no idea what this dose
-    key = cv2.waitKey(10)
+                    conf = float(box.conf[0])
+
+                    colour = getColours(cls)
+
+                    cv2.rectangle(frame, (x1, y1), (x2, y2), colour, 2)
+
+                    cv2.putText(frame, f"{class_name} {conf:.2f}",
+                                (x1, max(y1 - 10, 20)), cv2.FONT_HERSHEY_SIMPLEX,
+                                0.6, colour, 2)
+
+        cv2.imshow("test",frame)
+        #no idea what this dose
+
+
+
+        frame_count += 1
 
     if key ==27 or cv2.getWindowProperty('test', cv2.WND_PROP_VISIBLE) < 1:
-          break
-    
-    #todo add exit
-    frame_count += 1
+        break
+
+
 
 cv2.destroyAllWindows()
 videoCap.release()
