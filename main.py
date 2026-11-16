@@ -1,14 +1,7 @@
 #this is the mail file for CV as of now.
 import time
-from threading import Thread
-import pyopencl as cl
+
 import cv2
-
-
-#import pyopencl as cl
-print("PyOpenCL version:", cl.VERSION_TEXT)
-
-
 from ultralytics import YOLO
 import random
 
@@ -19,7 +12,10 @@ import random
 #TODO make a log file
 print("start of program")
 print("______________________________________________")
-yolo = YOLO("yolov8s.pt")
+
+# Use YOLOv8n (nano) instead of YOLOv8s (small) for ~2x faster inference.
+# If you need the accuracy of yolov8s, switch back but expect slower speeds.
+yolo = YOLO("yolov8n.pt")
 
 # Each class (person, car, etc.) gets a unique RGB color.
 # random.seed(cls_num): makes color consistent across frames.
@@ -36,10 +32,21 @@ yolo = YOLO("yolov8s.pt")
 video_path = "/dev/video0"
 videoCap = cv2.VideoCapture(video_path)
 
-frame_count = 0
+# Set camera to lowest resolution for faster capture
+videoCap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+videoCap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+videoCap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
 
-def drawFrame():
-    results = yolo.track(frame, stream=True)
+frame_count = 0
+# FPS tracking
+fps_start = time.time()
+frame_since_fps = 0
+# Process every Nth frame to reduce inference load
+PROCESS_EVERY = 5
+frame_since_process = 0
+
+def drawFrame(fr):
+    results = yolo.predict(fr, stream=True, imgsz=320, verbose=False)
     for result in results:
         class_names = result.names
         for box in result.boxes:
@@ -51,54 +58,37 @@ def drawFrame():
 
                 conf = float(box.conf[0])
 
-                colour = getColours(cls)
+                cv2.rectangle(fr, (x1, y1), (x2, y2), 2)
 
-                cv2.rectangle(frame, (x1, y1), (x2, y2), colour, 2)
-
-                cv2.putText(frame, f"{class_name} {conf:.2f}",
+                cv2.putText(fr, f"{class_name} {conf:.2f}",
                             (x1, max(y1 - 10, 20)), cv2.FONT_HERSHEY_SIMPLEX,
-                            0.6, colour, 2)
+                            0.6, 2)
 
 
-
-def getColours(cls_num):
-    """Generate unique colors for each class ID"""
-
-    random.seed(cls_num)
-    return (255, 0, 0)
-boxThreadRunning = False
-videoThreadRunning = False
 while True:
-
     ret, frame = videoCap.read()
-    print("starting")
-    boxThreadRunning = True
-    boxThread = Thread(target=drawFrame())
-    if not boxThreadRunning:
-        boxThread.start()
-        boxThreadRunning = True
-
-    key = cv2.waitKey(1)
-
-    # TODO move to an init funciton for a slight speed up
     if not ret:
         video_path = "/dev/video0"
         videoCap = cv2.VideoCapture(video_path)
-        dev_cam = True
         continue
 
+    frame_since_process += 1
 
 
+    if frame_since_process >= PROCESS_EVERY:
+        frame_since_process = 0
+        drawFrame(frame)
 
-    cv2.imshow("test",frame)
+    key = cv2.waitKey(1)
+    cv2.imshow("test", frame)
 
-    if key ==27 or cv2.getWindowProperty('test', cv2.WND_PROP_VISIBLE) < 1:
+    if key == 27 or cv2.getWindowProperty('test', cv2.WND_PROP_VISIBLE) < 1:
           break
 
     #todo add exit
     frame_count += 1
 
-boxThread.join()
+
 cv2.destroyAllWindows()
 videoCap.release()
 
