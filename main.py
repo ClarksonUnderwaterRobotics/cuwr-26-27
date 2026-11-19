@@ -19,12 +19,6 @@ yolo = YOLO("yolov8n.pt")
 
 # Each class (person, car, etc.) gets a unique RGB color.
 # random.seed(cls_num): makes color consistent across frames.
-
-# for testing run 
-# ffmpeg -f v4l2 -video_size 640x480 -i /dev/video0 -vf "format=yuv420p" -f h264 "udp://127.0.0.1:1234" and then run the program
-# this may need to be ran as root. It may be SE linux or some odd quirck of the Red Hat world for me but who knows.
-# This is lagging on my end I do not think my loopback was made for this sort of work, and my IGPU sucks at video encoding. 
-# also my I have a 12th gen 
         
 
 
